@@ -1,0 +1,216 @@
+// This program tests the functions add_buns, add_cheese, add_patties, 
+//   add_pickles, order, check_inventory
+
+int inventory_buns; 
+int inventory_cheese;
+int inventory_patties;  
+int inventory_pickles;
+
+// add_buns(crates) adds crates of buns to the inventory
+// effects: produces output
+//          reads input
+
+void add_buns(int crates) {
+  int a_crate = 144;
+  if (crates > 0) {
+    inventory_buns = (a_crate * crates) + inventory_buns;
+  } else {
+    printf("invalid: add_buns\n");
+  }
+}
+
+// add_cheese(blocks) adds blocks of cheese to the inventory.
+// effects: produces output
+//          reads input
+
+void add_cheese(int blocks) {
+  int a_block = 36;
+  if (blocks > 0) {
+    inventory_cheese = (a_block * blocks) + inventory_cheese;
+  } else {
+    printf("invalid: add_cheese\n");
+  }
+}
+
+
+// add_patties(boxes) adds boxes of patties to the inventory.
+// effects: produces output
+//          reads input
+
+void add_patties(int boxes) {
+  int a_box = 48;
+  if (boxes > 0) {
+    inventory_patties = (a_box * boxes) + inventory_patties;
+  } else {
+    printf("invalid: add_patties\n");
+  }
+}
+
+// add_pickles(boxes) adds jars of pickles to the inventory.
+// effects: produces output
+//          reads input
+
+void add_pickles(int jars) {
+  int a_jar = 250;
+  if (jars > 0) {
+    inventory_pickles = (a_jar * jars) + inventory_pickles;
+  } else {
+    printf("invalid: add_pickles\n");
+  }
+}
+
+// missing_ingredients(burgers) prints out which ingredients are missing to 
+//    create the number of burgers
+// effects: produces output
+//          reads input
+
+void missing_ingredients(int burgers) {
+  if (inventory_buns < burgers * 1) {
+    printf("  not enough buns\n");
+  } 
+
+  if (inventory_cheese < burgers * 2) {
+    printf("  not enough cheese\n");
+  } 
+
+  if (inventory_patties < burgers * 2) {
+    printf("  not enough patties\n");
+  }
+
+  if (inventory_pickles < burgers * 3) {
+    printf("  not enough pickles\n");
+  }
+}
+
+// create_burgers(burgers) updates the inventory after creating the number of 
+//   burgers demanded
+// effects: produces output
+//          reads input
+
+void create_burgers(int burgers) {
+  inventory_buns = inventory_buns - burgers * 1;
+  inventory_cheese = inventory_cheese - burgers * 2;
+  inventory_patties = inventory_patties - burgers * 2;
+  inventory_pickles = inventory_pickles - burgers *3;
+}
+
+
+// order(burgers) tries to fulfill an order for the given quantity of burgers
+// effects: produces output
+//          reads input
+
+void order(int burgers) {
+  if ( burgers <= 0) {
+    printf("invalid: order\n");
+  } else if ((inventory_patties < burgers * 2) ||
+             (inventory_cheese < burgers * 2) ||
+             (inventory_pickles < burgers * 3) ||
+             (inventory_buns < burgers * 1)) {
+    printf("order cancelled:\n");
+    missing_ingredients(burgers);
+  } else {
+    create_burgers(burgers);
+    printf("order complete: %d burgers\n", burgers);  
+  }
+
+}
+
+// check_inventory() prints a message listing all of the current ingredient 
+//    inventory levels
+// effects: produces output
+//          reads input
+
+void check_inventory(void) {
+  printf("inventory:\n");
+
+  printf("  buns: [%d] ", inventory_buns);
+  if (inventory_buns < 10 * 1) {
+    printf("WARNING\n");
+  } else if (inventory_buns < 100 * 1) {
+    printf("LOW\n"); 
+  } else {
+    printf("OK\n");  
+  }
+
+  printf("  cheese: [%d] ", inventory_cheese);
+  if (inventory_cheese < 10 * 2) {
+    printf("WARNING\n");
+  } else if (inventory_cheese < 100 * 2) {
+    printf("LOW\n"); 
+  } else {
+    printf("OK\n");  
+  }
+
+  printf("  patties: [%d] ", inventory_patties);
+  if (inventory_patties < 10 * 2) {
+    printf("WARNING\n");
+  } else if (inventory_patties < 100 * 2) {
+    printf("LOW\n"); 
+  } else {
+    printf("OK\n");  
+  }
+
+  printf("  pickles: [%d] ", inventory_pickles);
+  if (inventory_pickles < 10 * 3) {
+    printf("WARNING\n");
+  } else if (inventory_pickles < 100 * 3) {
+    printf("LOW\n"); 
+  } else {
+    printf("OK\n");  
+  }
+}
+
+// burger_io() is an I/O driver that reads commands and values from input
+//   and then calls the corresponding burger inventory functions
+// effects: reads input
+//          produces output
+void burger_io(void) {
+  int cmd = read_symbol();
+  if (cmd == lookup_symbol("add")) {
+    int type = read_symbol();
+    int qty = read_int();
+    if (qty == READ_INT_FAIL) {
+      printf("UNEXPECTED: INVALID INPUT FILE [add]\n");
+      return;
+    }
+    if (type == lookup_symbol("buns")) {
+      add_buns(qty);
+    } else if (type == lookup_symbol("cheese")) {
+      add_cheese(qty);
+    } else if (type == lookup_symbol("patties")) {
+      add_patties(qty);
+    } else if (type == lookup_symbol("pickles")) {
+      add_pickles(qty);
+    } else {
+      printf("UNEXPECTED: INVALID INPUT FILE [add]\n");
+      return;
+    }
+  } else if (cmd == lookup_symbol("order")) {
+    int qty = read_int();
+    if (qty == READ_INT_FAIL) {
+      printf("UNEXPECTED: INVALID INPUT FILE [order]\n");
+      return;
+    }
+    order(qty);
+  } else if (cmd == lookup_symbol("inventory")) {
+    check_inventory();
+  } else if (cmd == lookup_symbol("quit")) {
+    return;
+  } else {
+    printf("UNEXPECTED: INVALID INPUT FILE [bad/missing command]\n");
+    return;
+  }
+  burger_io();  
+}
+
+
+int main(void) {
+  //add_cheese(10);
+  //add_patties(100);
+  //add_pickles(100);
+  //add_buns(1);
+  //check_inventory();
+  //order(100);
+  //check_inventory();
+  burger_io();
+}
