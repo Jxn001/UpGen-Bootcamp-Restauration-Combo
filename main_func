@@ -7,8 +7,6 @@ int inventory_patties;
 int inventory_pickles;
 
 // add_buns(crates) adds crates of buns to the inventory
-// effects: produces output
-//          reads input
 
 void add_buns(int crates) {
   int a_crate = 144;
@@ -20,8 +18,6 @@ void add_buns(int crates) {
 }
 
 // add_cheese(blocks) adds blocks of cheese to the inventory.
-// effects: produces output
-//          reads input
 
 void add_cheese(int blocks) {
   int a_block = 36;
@@ -34,8 +30,6 @@ void add_cheese(int blocks) {
 
 
 // add_patties(boxes) adds boxes of patties to the inventory.
-// effects: produces output
-//          reads input
 
 void add_patties(int boxes) {
   int a_box = 48;
@@ -47,8 +41,6 @@ void add_patties(int boxes) {
 }
 
 // add_pickles(boxes) adds jars of pickles to the inventory.
-// effects: produces output
-//          reads input
 
 void add_pickles(int jars) {
   int a_jar = 250;
@@ -61,8 +53,6 @@ void add_pickles(int jars) {
 
 // missing_ingredients(burgers) prints out which ingredients are missing to 
 //    create the number of burgers
-// effects: produces output
-//          reads input
 
 void missing_ingredients(int burgers) {
   if (inventory_buns < burgers * 1) {
@@ -84,8 +74,6 @@ void missing_ingredients(int burgers) {
 
 // create_burgers(burgers) updates the inventory after creating the number of 
 //   burgers demanded
-// effects: produces output
-//          reads input
 
 void create_burgers(int burgers) {
   inventory_buns = inventory_buns - burgers * 1;
@@ -96,8 +84,6 @@ void create_burgers(int burgers) {
 
 
 // order(burgers) tries to fulfill an order for the given quantity of burgers
-// effects: produces output
-//          reads input
 
 void order(int burgers) {
   if ( burgers <= 0) {
@@ -117,8 +103,6 @@ void order(int burgers) {
 
 // check_inventory() prints a message listing all of the current ingredient 
 //    inventory levels
-// effects: produces output
-//          reads input
 
 void check_inventory(void) {
   printf("inventory:\n");
@@ -162,8 +146,7 @@ void check_inventory(void) {
 
 // burger_io() is an I/O driver that reads commands and values from input
 //   and then calls the corresponding burger inventory functions
-// effects: reads input
-//          produces output
+
 void burger_io(void) {
   int cmd = read_symbol();
   if (cmd == lookup_symbol("add")) {
@@ -202,7 +185,6 @@ void burger_io(void) {
   }
   burger_io();  
 }
-
 
 int main(void) {
   //add_cheese(10);
